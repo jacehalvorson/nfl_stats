@@ -1,16 +1,18 @@
 use std::path::Path;
 use std::fs::File;
 use std::io::BufWriter;
-use reqwest::{get, Response, Error};
+use reqwest::{get, Response};
 use scraper::{Html, Selector};
 use serde::{Deserialize, Serialize};
-use serde_json::{Result, to_writer};
+use serde_json::{Value, Number, Result};
 
+#[derive(Debug, Serialize)]
 struct Stats {
    headers: Vec<String>,
-   data: Vec<Vec<String>>
+   data: Vec<Vec<Value>>
 }
 
+#[derive(Debug, Serialize)]
 struct PassingHeaders {
    rank: String,
    player: String,
@@ -45,11 +47,8 @@ struct PassingHeaders {
    game_winning_drives: String
 }
 
-fn write_to_json( _path: &Path, data: &Vec<String> ) -> Result<()> {
-   let mut json_string: String = String::from("{[\"products\":");
-   json_string.push_str( &data.join(",") );
-   json_string.push_str( "]}");
-   println!( "{}", json_string );
+fn write_to_json( _path: &Path, data: &Stats ) -> Result<()> {
+   let json_string: String = serde_json::to_string(data).unwrap();
 
    // Create a JSON file and write to it
    let file: File = File::create( "stats.json" ).unwrap();
@@ -60,23 +59,36 @@ fn write_to_json( _path: &Path, data: &Vec<String> ) -> Result<()> {
 
 pub async fn get_page() -> Result<Vec<String>> {
    // Send GET request to the URL and get HTML in plaintext
-   let url: &str = "https://www.pro-football-reference.com/years/2022/passing.htm";
-   let response: Response = get(url).await.unwrap();
-   let text: String = response.text().await.unwrap();
+   // let url: &str = "https://www.pro-football-reference.com/years/2022/passing.htm";
+   // let response: Response = get(url).await.unwrap();
+   // let text: String = response.text().await.unwrap();
 
-   // Select the table with NFL stats
-   let document = Html::parse_document( &text );
-   let selector = Selector::parse(".stats_table > thead > tr > th").unwrap();
+   // // Select the table with NFL stats
+   // let document = Html::parse_document( &text );
+   // let selector = Selector::parse(".stats_table > thead > tr > th").unwrap();
 
-   // Grab headers for the table
+   // // Grab headers for the table
    let mut headers: Vec<String> = Vec::new();
-   for element in document.select( &selector ) {
-      headers.push( element.inner_html() );
-   }
+   // for element in document.select( &selector ) {
+   //    headers.push( element.inner_html() );
+   // }
 
-   // Write headers to JSON file
-   let path = Path::new( r"..\data\stats.json" );
-   write_to_json( &path, &headers ).unwrap();
+   let header = vec!["A".to_string(), "B".to_string(), "C".to_string()];
+   let data: Vec<Vec<Value>> = vec![
+        vec![Value::Number( Number::from_f64( 1.0 ).unwrap() ), get_value(), Value::Number( Number::from( 3 ) )]
+      //   vec![4.0, "bar".to_string(), 6] ),
+   ];
+
+   // Fill Stats struct
+   let json_data: Stats = Stats { headers: header, data };
+
+   // Write Stats struct to JSON file
+   let path = Path::new( r"data/stats.json" );
+   write_to_json( &path, &json_data ).unwrap();
 
    return Ok( headers );
+}
+
+fn get_value( ) -> Value {
+   return Value::String( "foo".to_string() );
 }

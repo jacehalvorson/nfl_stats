@@ -1,1 +1,0 @@
-C:\Users\every\Documents\nflstatsrequest\target\debug\nflstatsrequest.exe: C:\Users\every\Documents\nflstatsrequest\src\lib.rs C:\Users\every\Documents\nflstatsrequest\src\main.rs C:\Users\every\Documents\nflstatsrequest\src\practice.rs C:\Users\every\Documents\nflstatsrequest\src\threads.rs C:\Users\every\Documents\nflstatsrequest\src\utils.rs

@@ -1,23 +1,15 @@
-use crate::practice::Complex;
-
 mod tests {
-    use super::*;
+    use crate::utils::get_page;
+    use tokio::test;
 
     #[test]
-    fn test_display() {
-        let c = Complex { real: 1.0, imaginary: 2.0 };
-        assert_eq!(format!("{}", c), "1.0 + 2.0i");
-    }
+    async fn test_get_page() {
+        let response = get_page().await.unwrap();
+        let expected_data = vec! ["Rk", "Player", "Tm", "Age", "Pos",
+        "G", "GS", "QBrec", "Cmp", "Att", "Cmp%", "Yds", "TD", "TD%", "Int", "Int%",
+        "1D", "Lng", "Y/A", "AY/A", "Y/C", "Y/G", "Rate", "QBR", "Sk", "Yds", "Sk%",
+        "NY/A", "ANY/A", "4QC", "GWD"];
 
-    #[test]
-    fn test_display_negative_imaginary() {
-        let c = Complex { real: 1.0, imaginary: -2.0 };
-        assert_eq!(format!("{}", c), "1.0 - 2.0i");
-    }
-
-    #[test]
-    fn test_display_zero_imaginary() {
-        let c = Complex { real: 1.0, imaginary: 0.0 };
-        assert_eq!(format!("{}", c), "1.0 + 0.0i");
+        assert!( response == expected_data );
     }
 }

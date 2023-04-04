@@ -1,0 +1,17 @@
+c:\Users\every\Documents\nflstatsrequest\target\debug\deps\cssparser-784044b75c76b868.rmeta: C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\lib.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\macros.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\rules_and_declarations.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\color.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\cow_rc_str.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\from_bytes.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\nth.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\parser.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\serializer.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\unicode_range.rs c:\Users\every\Documents\nflstatsrequest\target\debug\build\cssparser-fed278f494fe4066\out/tokenizer.rs
+
+c:\Users\every\Documents\nflstatsrequest\target\debug\deps\cssparser-784044b75c76b868.d: C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\lib.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\macros.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\rules_and_declarations.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\color.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\cow_rc_str.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\from_bytes.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\nth.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\parser.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\serializer.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\unicode_range.rs c:\Users\every\Documents\nflstatsrequest\target\debug\build\cssparser-fed278f494fe4066\out/tokenizer.rs
+
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\lib.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\macros.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\rules_and_declarations.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\color.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\cow_rc_str.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\from_bytes.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\nth.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\parser.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\serializer.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\cssparser-0.29.6\src\unicode_range.rs:
+c:\Users\every\Documents\nflstatsrequest\target\debug\build\cssparser-fed278f494fe4066\out/tokenizer.rs:
+
+# env-dep:OUT_DIR=c:\\Users\\every\\Documents\\nflstatsrequest\\target\\debug\\build\\cssparser-fed278f494fe4066\\out

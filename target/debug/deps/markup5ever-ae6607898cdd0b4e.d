@@ -1,0 +1,15 @@
+c:\Users\every\Documents\nflstatsrequest\target\debug\deps\markup5ever-ae6607898cdd0b4e.rmeta: C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\lib.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\data\mod.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\interface\mod.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\interface\tree_builder.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\serialize.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\util\buffer_queue.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\util\smallcharset.rs c:\Users\every\Documents\nflstatsrequest\target\debug\build\markup5ever-9d5b0b76e4a8fc5a\out/generated.rs c:\Users\every\Documents\nflstatsrequest\target\debug\build\markup5ever-9d5b0b76e4a8fc5a\out/named_entities.rs
+
+c:\Users\every\Documents\nflstatsrequest\target\debug\deps\markup5ever-ae6607898cdd0b4e.d: C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\lib.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\data\mod.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\interface\mod.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\interface\tree_builder.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\serialize.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\util\buffer_queue.rs C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\util\smallcharset.rs c:\Users\every\Documents\nflstatsrequest\target\debug\build\markup5ever-9d5b0b76e4a8fc5a\out/generated.rs c:\Users\every\Documents\nflstatsrequest\target\debug\build\markup5ever-9d5b0b76e4a8fc5a\out/named_entities.rs
+
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\lib.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\data\mod.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\interface\mod.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\interface\tree_builder.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\serialize.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\util\buffer_queue.rs:
+C:\Users\every\.cargo\registry\src\github.com-1ecc6299db9ec823\markup5ever-0.11.0\util\smallcharset.rs:
+c:\Users\every\Documents\nflstatsrequest\target\debug\build\markup5ever-9d5b0b76e4a8fc5a\out/generated.rs:
+c:\Users\every\Documents\nflstatsrequest\target\debug\build\markup5ever-9d5b0b76e4a8fc5a\out/named_entities.rs:
+
+# env-dep:OUT_DIR=c:\\Users\\every\\Documents\\nflstatsrequest\\target\\debug\\build\\markup5ever-9d5b0b76e4a8fc5a\\out

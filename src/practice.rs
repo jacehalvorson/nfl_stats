@@ -1,4 +1,4 @@
-#[allow(unused_variables)]
+#[allow(dead_code, unused_variables, unused_macros)]
 
 use std::fmt; // Import `fmt`
 
@@ -69,7 +69,6 @@ impl fmt::Display for Complex {
     }
 }
 
-#[allow(dead_code)]
 fn display() {
     let minmax = MinMax(0, 14);
 

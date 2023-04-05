@@ -1,3 +1,1 @@
-pub mod practice;
-pub mod threads;
-pub mod write_stats_to_json;
+pub mod get_stats_and_write_to_html;

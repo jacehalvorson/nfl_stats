@@ -7,9 +7,6 @@ use std::error::Error;
 use reqwest::{get, Response};
 use scraper::{Html, Selector};
 
-#[derive(Debug)]
-struct StatsError;
-
 macro_rules! debug_print {
    ( $printed_object: ident ) => {
        println!( "DEBUG: {}:{}:{}\n{}: {:?}\n", file!(), line!(), column!(), stringify!($printed_object), $printed_object );
@@ -31,7 +28,7 @@ pub async fn get_stats_and_write_to_html( url: &str ) -> Result<(), Box<dyn Erro
    let table_container_html = document.select( &table_container_selector ).next().unwrap();
    let table_container_html_string = table_container_html.inner_html();
 
-   // Write Stats struct to JSON file
+   // Write the entirety of the table container to an HTML file
    let path = Path::new( r"data/stats_table.html" );
    let mut file: File = File::create( path ).unwrap();
    file.write_all( table_container_html_string.as_bytes() ).unwrap();

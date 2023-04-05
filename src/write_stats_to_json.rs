@@ -4,7 +4,7 @@ use std::io::prelude::*;
 use reqwest::{get, Response};
 use scraper::{Html, Selector};
 use serde::{Serialize};
-use serde_json::{Value, Result};
+use serde_json::{Result};
 
 #[derive(Debug, Serialize)]
 struct Stats {
@@ -46,17 +46,18 @@ struct QBPlayer {
    game_winning_drives: u8
 }
 
+#[allow(unused_macros)]
 macro_rules! debug_print {
     ( $printed_object: ident ) => {
         println!( "DEBUG: {}:{}:{}\n{}: {:?}\n", file!(), line!(), column!(), stringify!($printed_object), $printed_object );
     };
 }
 
+#[allow(dead_code)]
 fn write_to_json( _path: &Path, data: &Stats ) -> Result<()> {
+   // Serialize the data structure int JSON
    let json_string = serde_json::to_string(data)?;
-   debug_print!( json_string );
-   debug_print!( data );
-
+   
    // Create a JSON file and write to it
    let mut file: File = File::create( "data/stats.json" ).unwrap();
    file.write_all( json_string.as_bytes() ).unwrap();
@@ -70,54 +71,17 @@ pub async fn write_stats_to_json( url: &str ) -> Result<()> {
 
    // Select the table with NFL stats
    let document = Html::parse_document( &text );
-   let selector = Selector::parse(".stats_table > thead > tr > th").unwrap();
+   let _head_selector = Selector::parse(".stats_table > thead > tr > th").unwrap();
+   let _body_selector = Selector::parse(".stats_table > tbody > tr").unwrap();
+   let table_container_selector = Selector::parse(".table_container").unwrap();
 
-   // Grab headers for the table
-   let headers: Vec<String> = document.select( &selector )
-                              .map( |element| 
-                                    element.inner_html() )
-                              .collect::<Vec<String>>();
-   debug_print!( headers );                                  
-
-   let fake_qbs = vec![ QBPlayer {
-      name: "foo".to_string(),
-      team: "bar".to_string(),
-      age: 1,
-      position: "baz".to_string(),
-      games: 2,
-      games_started: 3,
-      qb_record: "qux".to_string(),
-      completions: 4,
-      attempts: 5,
-      completion_percentage: 6.0,
-      yards: 7,
-      touchdowns: 8,
-      touchdown_percentage: 9.0,
-      interceptions: 10,
-      interception_percentage: 11.0,
-      first_downs: 12,
-      longest: 13,
-      yards_per_attempt: 14.0,
-      adjusted_yards_per_attempt: 15.0,
-      yards_per_completion: 16.0,
-      yards_per_game: 17.0,
-      passer_rating: 18.0,
-      qb_rating: 19.0,
-      sacks: 20,
-      sack_yards: 21,
-      sack_percentage: 22.0,
-      net_yards_per_attempt: 23.0,
-      adjusted_net_yards_per_attempt: 24.0,
-      fourth_quarter_comebacks: 25,
-      game_winning_drives: 26
-   } ];
-
-   // Fill Stats struct
-   let json_data: Stats = Stats { attributes: headers, data: fake_qbs };
+   // Grab innerHTML of the headers for the table
+   let table_container_html: String = document.select( &table_container_selector ).next().unwrap().inner_html();
 
    // Write Stats struct to JSON file
-   let path = Path::new( r"data/stats.json" );
-   write_to_json( &path, &json_data ).unwrap();
+   let path = Path::new( r"data/stats_table.html" );
+   let mut file: File = File::create( path ).unwrap();
+   file.write_all( table_container_html.as_bytes() ).unwrap();
 
    return Ok( () );
 }

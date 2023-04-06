@@ -1,9 +1,9 @@
 #[allow(dead_code, unused_variables, unused_macros)]
 
-mod get_stats_and_write_to_html;
+pub mod json;
 
 use std::env::args;
-use crate::get_stats_and_write_to_html::get_stats_and_write_to_html;
+use crate::json::get_stats_and_write_to_json;
 
 #[tokio::main]
 async fn main() {
@@ -16,7 +16,7 @@ async fn main() {
    }
    let url = format!( "https://www.pro-football-reference.com/years/{year}/{category}.htm", year=args[1], category=args[2] );
 
-   get_stats_and_write_to_html( &url ).await.unwrap();
+   get_stats_and_write_to_json( &url ).await.unwrap();
 
    println!();
 }

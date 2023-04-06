@@ -71,7 +71,7 @@ r#"{{
       data_matrix = data_matrix );
 
    // Write this formatted string to a JSON file
-   let mut file: File = File::create( "data/stats_table.json" ).unwrap();
+   let mut file: File = File::create( "stats_table.json" ).unwrap();
    file.write_all( json_string.as_bytes() ).unwrap();
 
    return Ok( () );

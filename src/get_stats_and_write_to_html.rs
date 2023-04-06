@@ -21,7 +21,7 @@ pub async fn get_stats_and_write_to_html( url: &str ) -> Result<(), Box<dyn Erro
    let table_container_html_string = table_container_html.inner_html();
 
    // Write the entirety of the table container to an HTML file
-   let path = Path::new( r"data/stats_table.html" );
+   let path = Path::new( r"stats_table.html" );
    let mut file: File = File::create( path ).unwrap();
    file.write_all( table_container_html_string.as_bytes() ).unwrap();
 

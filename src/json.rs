@@ -17,7 +17,7 @@ pub async fn get_stats_and_write_to_json( url: &str ) -> Result<(), Box<dyn Erro
    let response: Response = get(url).await?;
    let text: String = response.text().await?;
 
-   let head_selector = Selector::parse(".stats_table > thead > tr > th")?;
+   let head_selector = Selector::parse(".stats_table > thead > tr:not(.over_header) > th")?;
    let body_selector = Selector::parse(".stats_table > tbody > tr")?;
    let a_selector = Selector::parse("a")?;
    let td_selector = Selector::parse("td")?;
@@ -64,8 +64,8 @@ pub async fn get_stats_and_write_to_json( url: &str ) -> Result<(), Box<dyn Erro
 
    let json_string = format!(
 r#"{{
-   "rows": {header_list:?},
-   "data": {data_matrix:?}
+   "headers": {header_list:?},
+   "rows": {data_matrix:?}
 }}"#,
       header_list = header_list,
       data_matrix = data_matrix );

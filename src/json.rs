@@ -3,35 +3,39 @@
 use std::fs::File;
 use std::io::prelude::*;
 use std::error::Error;
-use reqwest::{get, Response};
+use reqwest::blocking::Client;
 use scraper::{Html, Selector};
 
-macro_rules! debug_print {
-   ( $printed_object: ident ) => {
-       println!( "DEBUG: {}:{}:{}\n{}: {:?}\n", file!(), line!(), column!(), stringify!($printed_object), $printed_object );
-   };
-}
-
-pub async fn get_stats_and_write_to_json( url: &str ) -> Result<(), Box<dyn Error>> {
+pub fn get_stats_and_write_to_json( url: &str ) -> Result<(), Box<dyn Error>> {
    // Send GET request to the URL and get HTML in plaintext
-   let response: Response = get(url).await?;
-   let text: String = response.text().await?;
+   let client = Client::new();
+   let response = client.get(url).send()?;
+   let mut text = String::new();
 
+   if response.status().is_success() {
+      text.push_str( &response.text()? );
+   } else {
+         return Err( Box::new( std::io::Error::new(
+                  std::io::ErrorKind::Other, format!( "GET {} request failed", url ) ) ) );
+   }
+
+   // Parse the HTML to get stats table represented as strings
+   let document = Html::parse_document( &text );
+   
+   // Selectors for the table headers and table rows
    let head_selector = Selector::parse(".stats_table > thead > tr:not(.over_header) > th")?;
    let body_selector = Selector::parse(".stats_table > tbody > tr")?;
    let a_selector = Selector::parse("a")?;
    let td_selector = Selector::parse("td")?;
 
-   let document = Html::parse_document( &text );
-   
    // Grab innerHTML of the headers for the table
-   let header_list = document.select( &head_selector ).map( |element| {
+   let attribute_list = document.select( &head_selector ).map( |element| {
          element.inner_html()
       })
       .collect::<Vec<String>>();
 
    // Create a vector of players, each of which is a vector of their stats
-   let mut data_matrix: Vec<Vec<String>> = Vec::new( );
+   let mut stats_matrix: Vec<Vec<String>> = Vec::new( );
    // Grab a list of <tr> tags
    let rows = document.select( &body_selector );
 
@@ -59,16 +63,16 @@ pub async fn get_stats_and_write_to_json( url: &str ) -> Result<(), Box<dyn Erro
       }
 
       // Add the player's data vector to the data matrix
-      data_matrix.push( player_vector );
+      stats_matrix.push( player_vector );
    }
 
    let json_string = format!(
 r#"{{
-   "headers": {header_list:?},
-   "rows": {data_matrix:?}
+   "attributes": {attribute_list:?},
+   "players": {stats_matrix:?}
 }}"#,
-      header_list = header_list,
-      data_matrix = data_matrix );
+      attribute_list = attribute_list,
+      stats_matrix = stats_matrix );
 
    // Write this formatted string to a JSON file
    let mut file: File = File::create( "stats_table.json" ).unwrap();

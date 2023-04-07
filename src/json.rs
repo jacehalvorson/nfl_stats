@@ -24,7 +24,7 @@ pub fn get_stats_and_write_to_json( url: &str ) -> Result<(), Box<dyn Error>> {
    
    // Selectors for the table headers and table rows
    let head_selector = Selector::parse(".stats_table > thead > tr:not(.over_header) > th")?;
-   let body_selector = Selector::parse(".stats_table > tbody > tr")?;
+   let body_selector = Selector::parse(".stats_table > tbody > tr:not(.thead)")?;
    let a_selector = Selector::parse("a")?;
    let td_selector = Selector::parse("td")?;
 

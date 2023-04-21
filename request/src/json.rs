@@ -1,22 +1,30 @@
 #[allow(dead_code, unused_variables, unused_macros)]
 
-use std::fs::File;
-use std::io::prelude::*;
 use std::error::Error;
-use reqwest::blocking::Client;
+use reqwest::Client;
 use scraper::{Html, Selector};
 
-pub fn get_stats_and_write_to_json( url: &str ) -> Result<(), Box<dyn Error>> {
+#[derive(Debug)]
+pub struct Item {
+   pub id: String,
+   pub attributes: Vec<String>,
+   pub players: Vec<Vec<String>>
+}
+
+pub async fn get_stats( year: i32, category: &str ) -> Result<Item, Box<dyn Error>> {
+   // Construct the URL
+   let url = format!( "https://www.pro-football-reference.com/years/{year}/{category}.htm", year=year, category=category );
+
    // Send GET request to the URL and get HTML in plaintext
    let client = Client::new();
-   let response = client.get(url).send()?;
+   let response = client.get(url).send().await?;
    let mut text = String::new();
 
    if response.status().is_success() {
-      text.push_str( &response.text()? );
+      text.push_str( &response.text().await? );
    } else {
-         return Err( Box::new( std::io::Error::new(
-                  std::io::ErrorKind::Other, format!( "GET {} request failed", url ) ) ) );
+      return Err( Box::new( std::io::Error::new(
+               std::io::ErrorKind::Other, format!( "GET request failed for {} {} stats", year, category ) ) ) );
    }
 
    // Parse the HTML to get stats table represented as strings
@@ -66,17 +74,11 @@ pub fn get_stats_and_write_to_json( url: &str ) -> Result<(), Box<dyn Error>> {
       stats_matrix.push( player_vector );
    }
 
-   let json_string = format!(
-r#"{{
-   "attributes": {attribute_list:?},
-   "players": {stats_matrix:?}
-}}"#,
-      attribute_list = attribute_list,
-      stats_matrix = stats_matrix );
+   let json_object = Item {
+      id: format!( "{year}{category}", year=year, category=category ),
+      attributes: attribute_list,
+      players: stats_matrix
+   };
 
-   // Write this formatted string to a JSON file
-   let mut file: File = File::create( "stats_table.json" ).unwrap();
-   file.write_all( json_string.as_bytes() ).unwrap();
-
-   return Ok( () );
+   return Ok( json_object );
 }

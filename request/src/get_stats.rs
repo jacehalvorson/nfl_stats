@@ -6,14 +6,20 @@ use scraper::{Html, Selector};
 use crate::types::Category::*;
 use crate::types::*;
 
-// Constants
-const TEAM_COLUMN: usize = 3;
-const QB_REC_COLUMN: usize = 7;
-const YPC_COLUMN: usize = 20;
-
-pub async fn get_stats( year: i32, category: &str ) -> Result<DynamoDBItem, Box<dyn Error>> {
+pub async fn get_stats( year: i32, category: &Category ) -> Result<DynamoDBItem, Box<dyn Error>> {
    // Construct the URL
-   let url = format!( "https://www.pro-football-reference.com/years/{year}/{category}.htm", year=year, category=category );
+   let category_string: &str = match category {
+      Passing => "passing",
+      Rushing => "rushing",
+      Receiving => "receiving",
+      Scrimmage => "scrimmage",
+      Defense => "defense",
+      Kicking => "kicking",
+      Punting => "punting",
+      Returns => "returns",
+      Scoring => "scoring"
+   };
+   let url = format!( "https://www.pro-football-reference.com/years/{}/{}.htm", year, category_string );
 
    // Send GET request to the URL and get HTML in plaintext
    let client = Client::new();
@@ -24,7 +30,7 @@ pub async fn get_stats( year: i32, category: &str ) -> Result<DynamoDBItem, Box<
       text.push_str( &response.text().await? );
    } else {
       return Err( Box::new( std::io::Error::new(
-               std::io::ErrorKind::Other, format!( "GET request failed for {} {} stats", year, category ) ) ) );
+               std::io::ErrorKind::Other, format!( "GET request failed for {} {} stats", year, category_string ) ) ) );
    }
 
    // Parse the HTML to get stats table represented as strings
@@ -37,7 +43,7 @@ pub async fn get_stats( year: i32, category: &str ) -> Result<DynamoDBItem, Box<
    let td_selector = Selector::parse("td")?;
 
    // Grab innerHTML of the headers for the table
-   let attribute_list = document.select( &head_selector ).map( |element| {
+   let attribute_list: Vec<String> = document.select( &head_selector ).map( |element| {
          element.inner_html()
       })
       .collect::<Vec<String>>();
@@ -61,11 +67,11 @@ pub async fn get_stats( year: i32, category: &str ) -> Result<DynamoDBItem, Box<
          match td.select( &a_selector ).next() {
             Some( a ) => {
                // Grab the innerHTML within the <a> tag
-               player_vector.push( filter_stat( a.inner_html(), col_index, Passing ) );
+               player_vector.push( filter_stat( a.inner_html(), attribute_list[ col_index+1 ].clone() ) );
             }
             None => { 
                // There are no <a> tags, so just grab the innerHTML of the td
-               player_vector.push( filter_stat( td.inner_html(), col_index, Passing ) );
+               player_vector.push( filter_stat( td.inner_html(), attribute_list[ col_index+1 ].clone() ) );
             }
          }
       }
@@ -75,7 +81,8 @@ pub async fn get_stats( year: i32, category: &str ) -> Result<DynamoDBItem, Box<
    }
 
    let json_object = DynamoDBItem {
-      id: format!( "{year}{category}", year=year, category=category ),
+      // The id is the year and category concatenated (ex. 2017receiving)
+      id: format!( "{}{}", year, category_string ),
       attributes: attribute_list,
       players: stats_matrix
    };
@@ -84,10 +91,10 @@ pub async fn get_stats( year: i32, category: &str ) -> Result<DynamoDBItem, Box<
 }
 
 // Filter the stats based on the column index.
-pub fn filter_stat( stat: String, col_index: usize, position: Category ) -> String {
-   match col_index {
+pub fn filter_stat( stat: String, attribute: String ) -> String {
+   match attribute.as_str() {
       // For the team column, use more common names
-      TEAM_COLUMN => {
+      "Tm" => {
          match stat.as_str() {
             "NWE" => "NE".to_string(),
             "GNB" => "GB".to_string(),
@@ -101,20 +108,34 @@ pub fn filter_stat( stat: String, col_index: usize, position: Category ) -> Stri
       },
 
       // For the QBRec column, display 0-0-0 for empty stats
-      QB_REC_COLUMN => {
+      "QBrec" => {
          match stat.as_str() {
             "" => "0-0-0".to_string(),
             _ => stat
          }
       },
 
-      // For the YPC column, display -- for empty stats (players with 0 carries)
-      YPC_COLUMN => {
+      // For the columns dependent on a denominator, display -- for empty denominators.
+      // This describes players with 0 carries, targets, touches, or passing attempts
+      "QBR" | "Y/C" | "Y/R" | "Y/Tgt" | "Y/Tch" | "Y/A" | "Y/Rt" | "Lng" | "Ctch%" | "FG%" | "XP%" | "TB%" | "KOAvg" => {
          match stat.as_str() {
             "" => "--".to_string(),
             _ => stat
          }
       },
+
+      // For the floating-point values guaranteed to have a denominator, display 0.0 for empty stats
+      "R/G" | "Y/G" | "A/G" | "Y/Tch" => {
+         match stat.as_str() {
+            "" => "0.0".to_string(),
+            _ => stat
+         }
+      },
+
+      // For columns we don't want to display 0 in (exceptions to default rule)
+      "Pos" => {
+         stat
+      }
 
       // For all other columns, display 0 for empty stats
       _ => {

@@ -1,9 +1,9 @@
 use aws_sdk_dynamodb::{ types::AttributeValue, Client, Error };
 use aws_config::meta::region::RegionProviderChain;
 use crate::get_stats::get_stats;
-use crate::types::DynamoDBItem;
+use crate::types::*;
 
-pub async fn fetch_and_add_to_table( year : i32, category: &str ) -> Result<(), Error> {
+pub async fn fetch_stats_and_add_to_table( year : i32, category: &Category ) -> Result<(), Error> {
     // Initialize the client
     let region_provider = RegionProviderChain::default_provider().or_else("us-east-1");
     let shared_config = aws_config::from_env().region( region_provider ).load().await;
@@ -11,7 +11,6 @@ pub async fn fetch_and_add_to_table( year : i32, category: &str ) -> Result<(), 
 
     // Fetch the requested stats
     let result : DynamoDBItem = get_stats( year, category ).await.unwrap();
-    println!( "{}\n{}\n{:?}\n", result.id, result.attributes[0], result.players[0] );
 
     // Define values with AttributeValue types
     let id = AttributeValue::S( result.id );

@@ -11,6 +11,7 @@ pub enum Category {
    Passing,
    Rushing,
    Receiving,
+   Scrimmage,
    Defense,
    Kicking,
    Punting,

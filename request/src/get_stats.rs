@@ -11,49 +11,6 @@ const TEAM_COLUMN: usize = 3;
 const QB_REC_COLUMN: usize = 7;
 const YPC_COLUMN: usize = 20;
 
-// Filter the stats based on the column index.
-pub fn filter_stat( stat: String, col_index: usize, position: Category ) -> String {
-   match col_index {
-      // For the team column, use more common names
-      TEAM_COLUMN => {
-         match stat.as_str() {
-            "NWE" => "NE".to_string(),
-            "GNB" => "GB".to_string(),
-            "KAN" => "KC".to_string(),
-            "SFO" => "SF".to_string(),
-            "NOS" => "NO".to_string(),
-            "TAM" => "TB".to_string(),
-            "NOR" => "NO".to_string(),
-            _ => stat
-         }
-      },
-
-      // For the QBRec column, display 0-0-0 for empty stats
-      QB_REC_COLUMN => {
-         match stat.as_str() {
-            "" => "0-0-0".to_string(),
-            _ => stat
-         }
-      },
-
-      // For the YPC column, display -- for empty stats (players with 0 carries)
-      YPC_COLUMN => {
-         match stat.as_str() {
-            "" => "--".to_string(),
-            _ => stat
-         }
-      },
-
-      // For all other columns, display 0 for empty stats
-      _ => {
-         match stat.as_str() {
-            "" => "0".to_string(),
-            _ => stat
-         }
-      }
-   }
-}
-
 pub async fn get_stats( year: i32, category: &str ) -> Result<DynamoDBItem, Box<dyn Error>> {
    // Construct the URL
    let url = format!( "https://www.pro-football-reference.com/years/{year}/{category}.htm", year=year, category=category );
@@ -124,4 +81,47 @@ pub async fn get_stats( year: i32, category: &str ) -> Result<DynamoDBItem, Box<
    };
 
    return Ok( json_object );
+}
+
+// Filter the stats based on the column index.
+pub fn filter_stat( stat: String, col_index: usize, position: Category ) -> String {
+   match col_index {
+      // For the team column, use more common names
+      TEAM_COLUMN => {
+         match stat.as_str() {
+            "NWE" => "NE".to_string(),
+            "GNB" => "GB".to_string(),
+            "KAN" => "KC".to_string(),
+            "SFO" => "SF".to_string(),
+            "NOS" => "NO".to_string(),
+            "TAM" => "TB".to_string(),
+            "NOR" => "NO".to_string(),
+            _ => stat
+         }
+      },
+
+      // For the QBRec column, display 0-0-0 for empty stats
+      QB_REC_COLUMN => {
+         match stat.as_str() {
+            "" => "0-0-0".to_string(),
+            _ => stat
+         }
+      },
+
+      // For the YPC column, display -- for empty stats (players with 0 carries)
+      YPC_COLUMN => {
+         match stat.as_str() {
+            "" => "--".to_string(),
+            _ => stat
+         }
+      },
+
+      // For all other columns, display 0 for empty stats
+      _ => {
+         match stat.as_str() {
+            "" => "0".to_string(),
+            _ => stat
+         }
+      }
+   }
 }

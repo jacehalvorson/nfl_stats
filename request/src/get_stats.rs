@@ -125,7 +125,7 @@ pub fn filter_stat( stat: String, attribute: String ) -> String {
       },
 
       // For the floating-point values guaranteed to have a denominator, display 0.0 for empty stats
-      "R/G" | "Y/G" | "A/G" | "Y/Tch" => {
+      "R/G" | "Y/G" | "A/G" => {
          match stat.as_str() {
             "" => "0.0".to_string(),
             _ => stat

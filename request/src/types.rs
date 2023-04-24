@@ -6,7 +6,7 @@ pub struct DynamoDBItem {
    pub players: Vec<Vec<String>>
 }
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq, PartialOrd, Ord)]
 pub enum Category {
    Passing,
    Rushing,

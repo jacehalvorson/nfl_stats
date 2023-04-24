@@ -11,6 +11,7 @@ reqwest = { version = "0.11", features=["blocking"] }
 scraper = { version = "0.15.0" }
 aws-config = "0.55.1"
 aws-sdk-dynamodb = "0.26.0"
+time = "0.2.23"
 
 [[test]]
 name = "integration_tests"

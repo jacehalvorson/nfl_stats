@@ -1,6 +1,7 @@
 use aws_sdk_dynamodb::{ types::AttributeValue, Client, Error };
 use aws_config::meta::region::RegionProviderChain;
-use crate::json::{ get_stats, Item };
+use crate::get_stats::get_stats;
+use crate::types::DynamoDBItem;
 
 pub async fn fetch_and_add_to_table( year : i32, category: &str ) -> Result<(), Error> {
     // Initialize the client
@@ -9,10 +10,10 @@ pub async fn fetch_and_add_to_table( year : i32, category: &str ) -> Result<(), 
     let client = Client::new( &shared_config );
 
     // Fetch the requested stats
-    let result : Item = get_stats( year, category ).await.unwrap();
+    let result : DynamoDBItem = get_stats( year, category ).await.unwrap();
     println!( "{}\n{}\n{:?}\n", result.id, result.attributes[0], result.players[0] );
 
-    // Define values in with AttributeValue types
+    // Define values with AttributeValue types
     let id = AttributeValue::S( result.id );
     let attributes = AttributeValue::L( result.attributes.iter().map( |x| AttributeValue::S( x.to_string() ) ).collect() );
     let players = AttributeValue::L( result.players.iter().map( |x| AttributeValue::L( x.iter().map( |y| AttributeValue::S( y.to_string() ) ).collect() ) ).collect() );
@@ -20,7 +21,7 @@ pub async fn fetch_and_add_to_table( year : i32, category: &str ) -> Result<(), 
     // Put the stats into DynamoDB table
     let request = client
         .put_item()
-        .table_name("NFLStats-main")
+        .table_name( "NFLStats-main" )
         .item( "id", id )
         .item( "attributes", attributes )
         .item( "players", players );

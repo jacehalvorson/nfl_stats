@@ -5,7 +5,8 @@ pub mod put_item;
 pub mod types;
 
 use std::env::args;
-use std::time::Instant;
+use std::time::{Instant, Duration};
+use std::thread;
 use crate::put_item::fetch_stats_and_add_to_table;
 use crate::types::Category::*;
 use crate::types::Category;
@@ -61,7 +62,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
    // Check if a third argument was passed
    // If so, check if it's a valid category
    // If not, default to Passing
-   let category = match args.get(3) {
+   let skip_to_category = match args.get(3) {
       Some( category_string ) => {
          match category_string.as_str() {
             "passing" => Passing,
@@ -87,11 +88,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
    for year in start_year..end_year {
       for cat in CATEGORIES.iter() {
-         if year == start_year && *cat < category {
+         if year == start_year && *cat < skip_to_category {
+            // User specified category to skip to with third argument
             continue;
          }
          fetch_stats_and_add_to_table( year, cat ).await?;
          println!( "{:?}: {} {:?} stats added to table", start.elapsed(), year, cat );
+         // 5 second delay between requests to avoid throttling
+         thread::sleep( Duration::from_millis( 5000 ) );
       }
    }
 
